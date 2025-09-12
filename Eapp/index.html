@@ -1,0 +1,1864 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>小红书管理平台 - 桌面版</title>
+  <style>
+    :root {
+      --primary: #ff2442;
+      --primary-light: #ff6b7a;
+      --secondary: #333;
+      --success: #52c41a;
+      --warning: #faad14;
+      --error: #ff4d4f;
+      --bg: #f5f5f5;
+      --card-bg: #ffffff;
+      --text: #333;
+      --text-light: #666;
+      --border: #e8e8e8;
+      --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .header h1 {
+      color: var(--primary);
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: var(--text-light);
+      font-size: 14px;
+    }
+
+    .session-bar {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .session-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mode-toggle {
+      display: flex;
+      align-items: center;
+    }
+
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .toggle-label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+    }
+
+    .toggle-text {
+      font-weight: 500;
+    }
+
+    .session-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .session-label {
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .session-select {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--card-bg);
+      font-size: 14px;
+      min-width: 200px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-light);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--secondary);
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #555;
+      transform: translateY(-1px);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #389e0d;
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(255, 36, 66, 0.1);
+    }
+
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status-online {
+      background: rgba(82, 196, 26, 0.1);
+      color: var(--success);
+    }
+
+    .status-offline {
+      background: rgba(255, 77, 79, 0.1);
+      color: var(--error);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .status-online .status-dot {
+      background: var(--success);
+    }
+
+    .status-offline .status-dot {
+      background: var(--error);
+    }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 16px 20px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      z-index: 1000;
+      transform: translateX(400px);
+      transition: transform 0.3s ease;
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .notification.success {
+      background: var(--success);
+    }
+
+    .notification.error {
+      background: var(--error);
+    }
+
+    .notification.warning {
+      background: var(--warning);
+    }
+
+    .notification.info {
+      background: var(--primary);
+    }
+
+    .content-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .content-item {
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      background: var(--card-bg);
+      transition: all 0.3s ease;
+    }
+
+    .content-item:hover {
+      border-color: var(--primary);
+      box-shadow: 0 2px 8px rgba(255, 36, 66, 0.1);
+    }
+
+    .content-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .content-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .content-type-badge {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+
+    .content-type-badge.video {
+      background: rgba(255, 36, 66, 0.1);
+      color: var(--primary);
+    }
+
+    .content-type-badge.image {
+      background: rgba(82, 196, 26, 0.1);
+      color: var(--success);
+    }
+
+    .content-id {
+      font-size: 11px;
+      color: var(--text-light);
+      font-family: monospace;
+    }
+
+    .content-title {
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .content-author {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .author-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .author-name {
+      font-size: 13px;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .content-cover {
+      margin-bottom: 12px;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .cover-image {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .content-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    .interaction-stats {
+      display: flex;
+      gap: 12px;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .content-dimensions {
+      font-family: monospace;
+      font-size: 11px;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .image-upload {
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.3s ease;
+    }
+
+    .image-upload:hover {
+      border-color: var(--primary);
+    }
+
+    .image-upload.dragover {
+      border-color: var(--primary);
+      background: rgba(255, 36, 66, 0.05);
+    }
+
+    .image-preview {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .image-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .image-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+     .image-remove {
+       position: absolute;
+       top: 4px;
+       right: 4px;
+       width: 20px;
+       height: 20px;
+       background: var(--error);
+       color: white;
+       border: none;
+       border-radius: 50%;
+       font-size: 12px;
+       cursor: pointer;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+     }
+
+     .image-info {
+       position: absolute;
+       bottom: 0;
+       left: 0;
+       right: 0;
+       background: rgba(0,0,0,0.7);
+       color: white;
+       padding: 4px 8px;
+       font-size: 12px;
+       text-align: center;
+       white-space: nowrap;
+       overflow: hidden;
+       text-overflow: ellipsis;
+     }
+
+     .image-path {
+       position: absolute;
+       bottom: 20px;
+       left: 4px;
+       right: 4px;
+       background: rgba(0,0,0,0.8);
+       color: white;
+       padding: 2px 4px;
+       font-size: 10px;
+       border-radius: 2px;
+       word-break: break-all;
+       max-height: 30px;
+       overflow: hidden;
+     }
+
+     .quick-path-btn {
+       padding: 4px 8px;
+       border: 1px solid var(--border);
+       border-radius: 4px;
+       background: var(--card-bg);
+       color: var(--text);
+       font-size: 11px;
+       cursor: pointer;
+       transition: all 0.2s ease;
+     }
+
+     .quick-path-btn:hover {
+       background: var(--primary);
+       color: white;
+       border-color: var(--primary);
+     }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 16px;
+      }
+      
+      .session-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 头部 -->
+    <div class="header">
+      <h1>📱 小红书管理平台</h1>
+      <p>轻松管理你的小红书内容，一键发布，智能分析</p>
+    </div>
+
+    <!-- 会话管理 -->
+    <div class="session-bar">
+      <div class="session-info">
+        <span class="session-label">当前会话：</span>
+        <select id="sessionSelect" class="session-select">
+          <option value="">请选择会话</option>
+        </select>
+        <button id="refreshSessions" class="btn btn-secondary">🔄 刷新</button>
+        <button id="addAccount" class="btn btn-success">➕ 添加账号</button>
+      </div>
+      <div class="session-controls">
+        <div id="loginStatus" class="status-indicator status-offline">
+          <span class="status-dot"></span>
+          <span>未登录</span>
+        </div>
+        <div class="mode-toggle">
+          <label class="toggle-label">
+            <input type="checkbox" id="headlessMode" checked>
+            <span class="toggle-text">无头模式</span>
+          </label>
+        </div>
+        <button id="checkLogin" class="btn btn-primary">🔍 检查登录状态</button>
+      </div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div class="grid">
+      <!-- 发布内容 -->
+      <div class="card">
+        <h3 class="card-title">📝 发布新内容</h3>
+        <form id="publishForm">
+          <div class="form-group">
+            <label class="form-label">标题</label>
+            <input type="text" id="title" class="form-input" placeholder="输入吸引人的标题..." maxlength="20">
+          </div>
+          <div class="form-group">
+            <label class="form-label">内容</label>
+            <textarea id="content" class="form-input form-textarea" placeholder="分享你的精彩内容..."></textarea>
+          </div>
+           <div class="form-group">
+             <label class="form-label">图片</label>
+             <div class="form-group" style="margin-bottom: 12px;">
+               <label class="form-label" style="font-size: 13px; margin-bottom: 6px;">图片完整路径</label>
+               <div style="display: flex; gap: 8px; margin-bottom: 4px;">
+                 <input type="text" id="imagePrefix" class="form-input" placeholder="例如: C:\Users\用户名\Downloads\发布素材\" 
+                        style="font-size: 13px; padding: 8px; flex: 1;">
+                 <button type="button" id="autoFillPrefix" class="btn btn-secondary" style="padding: 8px 12px; font-size: 12px;">
+                   🔍 自动检测
+                 </button>
+                 <button type="button" id="selectFolder" class="btn btn-secondary" style="padding: 8px 12px; font-size: 12px;">
+                   📁 选择文件夹
+                 </button>
+               </div>
+               <div style="display: flex; gap: 8px; margin-bottom: 4px;">
+                 <input type="text" id="usernameInput" class="form-input" placeholder="手动输入用户名（可选）" 
+                        style="font-size: 13px; padding: 8px; flex: 1;">
+                 <button type="button" id="setUsername" class="btn btn-secondary" style="padding: 8px 12px; font-size: 12px;">
+                   👤 设置用户名
+                 </button>
+               </div>
+               <div style="font-size: 11px; color: var(--text-light); margin-bottom: 4px;">
+                 输入图片文件夹的完整路径，程序会自动拼接文件名。示例: C:\Users\用户名\Downloads\发布素材\
+               </div>
+               <div id="quickPaths" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px;">
+                 <button type="button" class="quick-path-btn" data-path="user-downloads-material">用户下载/发布素材/</button>
+                 <button type="button" class="quick-path-btn" data-path="user-downloads">用户下载/</button>
+                 <button type="button" class="quick-path-btn" data-path="user-pictures">用户图片/</button>
+                 <button type="button" class="quick-path-btn" data-path="D:\images\">D:\images\</button>
+                 <button type="button" class="quick-path-btn" data-path="./images/">./images/</button>
+               </div>
+             </div>
+             <div class="image-upload" id="imageUpload">
+               <div>📷 点击选择图片或拖拽到此处</div>
+               <div style="font-size: 12px; color: var(--text-light); margin-top: 8px;">
+                 支持 JPG、PNG、GIF 格式<br>
+                 <strong>按住 Ctrl 键点击可选择整个文件夹（自动提取路径前缀）</strong>
+               </div>
+             </div>
+             <div style="display: flex; gap: 8px; margin-top: 8px;">
+               <button type="button" id="selectImageBtn" class="btn btn-secondary" style="flex: 1; padding: 8px 12px; font-size: 12px;">
+                 📷 选择图片文件
+               </button>
+               <button type="button" id="selectFolderBtn" class="btn btn-primary" style="flex: 1; padding: 8px 12px; font-size: 12px;">
+                 📁 选择图片文件夹（推荐）
+               </button>
+             </div>
+             <input type="file" id="imageInput" multiple accept="image/*" style="display: none;">
+             <input type="file" id="folderInput" webkitdirectory multiple style="display: none;">
+             <div class="image-preview" id="imagePreview"></div>
+             <div id="imagePathsList" class="image-paths-list" style="margin-top: 12px; padding: 12px; background: var(--bg); border-radius: 6px; font-size: 12px; display: none;">
+               <div style="font-weight: 500; margin-bottom: 8px; color: var(--text);">📁 将要上传的图片路径：</div>
+               <div id="imagePathsContent" style="font-family: monospace; color: var(--text-light); line-height: 1.4;"></div>
+             </div>
+           </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            <span id="publishText">🚀 发布内容</span>
+            <span id="publishLoading" class="loading hidden"></span>
+          </button>
+        </form>
+      </div>
+
+      <!-- 内容管理 -->
+      <div class="card">
+        <h3 class="card-title">📋 我的内容</h3>
+        <div style="margin-bottom: 16px;">
+          <button id="loadContent" class="btn btn-success">📥 加载内容列表</button>
+        </div>
+        <div class="content-list" id="contentList">
+          <div style="text-align: center; color: var(--text-light); padding: 40px 20px;">
+            点击"加载内容列表"查看你的发布内容
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 搜索功能 -->
+    <div class="card">
+      <h3 class="card-title">🔍 搜索内容</h3>
+      <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+        <input type="text" id="searchKeyword" class="form-input" placeholder=
+        "输入搜索关键词..." style="flex: 1;">
+        <button id="searchContent" class="btn btn-secondary">🔍 搜索</button>
+      </div>
+      <div class="content-list" id="searchResults">
+        <div style="text-align: center; color: var(--text-light); padding: 40px 20px;">
+          输入关键词开始搜索
+        </div>
+      </div>
+    </div>
+
+    <!-- 浏览器管理 -->
+    <div class="card">
+      <h3 class="card-title">🌐 浏览器管理</h3>
+      <div style="display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+        <button id="browserStatusBtn" class="btn btn-secondary">📊 查看状态</button>
+        <button id="closeBrowserBtn" class="btn btn-warning">❌ 关闭当前浏览器</button>
+        <button id="closeAllBrowsersBtn" class="btn btn-danger">🗑️ 关闭所有浏览器</button>
+      </div>
+      <div id="browserStatus" class="browser-status" style="background: var(--bg-light); padding: 16px; border-radius: 8px; font-family: monospace; font-size: 14px; display: none;">
+        <div style="text-align: center; color: var(--text-light);">
+          点击"查看状态"获取浏览器信息
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 通知组件 -->
+  <div id="notification" class="notification"></div>
+
+  <script>
+    // 等待DOM加载完成
+    document.addEventListener('DOMContentLoaded', function() {
+      // 全局变量
+      let currentSession = '';
+      let selectedImages = [];
+
+      // DOM 元素
+      const $ = (id) => document.getElementById(id);
+      const sessionSelect = $('sessionSelect');
+      const loginStatus = $('loginStatus');
+      const checkLoginBtn = $('checkLogin');
+      const refreshSessionsBtn = $('refreshSessions');
+      const addAccountBtn = $('addAccount');
+      const headlessMode = $('headlessMode');
+      const publishForm = $('publishForm');
+       const imageUpload = $('imageUpload');
+       const imageInput = $('imageInput');
+       const folderInput = $('folderInput');
+       const imagePreview = $('imagePreview');
+       const selectImageBtn = $('selectImageBtn');
+       const selectFolderBtn = $('selectFolderBtn');
+       const imagePrefix = $('imagePrefix');
+       const imagePathsList = $('imagePathsList');
+       const imagePathsContent = $('imagePathsContent');
+       const autoFillPrefix = $('autoFillPrefix');
+       const selectFolder = $('selectFolder');
+       const usernameInput = $('usernameInput');
+       const setUsername = $('setUsername');
+       const quickPaths = document.querySelectorAll('.quick-path-btn');
+      const loadContentBtn = $('loadContent');
+      const contentList = $('contentList');
+      const searchKeyword = $('searchKeyword');
+      const searchContentBtn = $('searchContent');
+      const searchResults = $('searchResults');
+      const notification = $('notification');
+
+      // 调试：检查元素是否正确获取
+      console.log('DOM elements loaded:', {
+        sessionSelect,
+        checkLoginBtn,
+        refreshSessionsBtn,
+        publishForm,
+        loadContentBtn,
+        searchContentBtn
+      });
+
+      // 测试按钮点击
+      if (checkLoginBtn) {
+        console.log('Check login button found:', checkLoginBtn);
+      } else {
+        console.error('Check login button NOT found');
+        console.log('Available elements:', document.querySelectorAll('button'));
+      }
+      
+      // 检查所有按钮元素
+      const allButtons = document.querySelectorAll('button');
+      console.log('All buttons found:', allButtons.length);
+      allButtons.forEach((btn, index) => {
+        console.log(`Button ${index}:`, btn.id, btn.textContent);
+      });
+
+    // 工具函数
+    function showNotification(message, type = 'info', duration = 3000) {
+      notification.textContent = message;
+      notification.className = `notification ${type}`;
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, duration);
+    }
+
+    function setLoading(element, loading) {
+      if (!element) {
+        console.error('setLoading: element is null');
+        return;
+      }
+      
+      const text = element.querySelector('span:not(.loading)');
+      const loadingEl = element.querySelector('.loading');
+      
+      if (loading) {
+        if (text) text.classList.add('hidden');
+        if (loadingEl) loadingEl.classList.remove('hidden');
+        element.disabled = true;
+        
+        // 如果没有loading元素，显示简单的加载状态
+        if (!loadingEl) {
+          element.textContent = '加载中...';
+        }
+      } else {
+        if (text) text.classList.remove('hidden');
+        if (loadingEl) loadingEl.classList.add('hidden');
+        element.disabled = false;
+        
+        // 如果没有loading元素，恢复原始文本
+        if (!loadingEl) {
+          // 根据按钮ID恢复原始文本
+          if (element.id === 'checkLogin') {
+            element.textContent = '🔍 检查登录状态';
+          } else if (element.id === 'loadContent') {
+            element.textContent = '📥 加载内容列表';
+          } else if (element.id === 'searchContent') {
+            element.textContent = '🔍 搜索';
+          } else if (element.id === 'refreshSessions') {
+            element.textContent = '🔄 刷新';
+          }
+        }
+      }
+    }
+
+    function updateLoginStatus(isLoggedIn) {
+      if (isLoggedIn) {
+        loginStatus.className = 'status-indicator status-online';
+        loginStatus.innerHTML = '<span class="status-dot"></span><span>已登录</span>';
+      } else {
+        loginStatus.className = 'status-indicator status-offline';
+        loginStatus.innerHTML = '<span class="status-dot"></span><span>未登录</span>';
+      }
+    }
+
+    function getHeaders() {
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+      
+      if (currentSession) {
+        headers['Mcp-Session-Id'] = currentSession;
+      }
+      
+      // 添加无头模式设置
+      headers['Mcp-Headless'] = headlessMode.checked ? 'true' : 'false';
+      
+      return headers;
+    }
+
+    // API 调用函数
+    async function apiCall(endpoint, method = 'GET', body = null) {
+      // 动态获取当前页面的端口
+      const currentPort = window.location.port || '18060';
+      const url = `http://localhost:${currentPort}${endpoint}`;
+      const options = {
+        method,
+        headers: getHeaders()
+      };
+      
+      if (body) {
+        options.body = JSON.stringify(body);
+      }
+      
+      const response = await fetch(url, options);
+      const data = await response.json();
+      
+      // 检查HTTP状态码
+      if (!response.ok) {
+        // 如果HTTP状态码不是2xx，抛出错误
+        const error = new Error(data.error || `HTTP ${response.status}: ${response.statusText}`);
+        error.data = data;
+        throw error;
+      }
+      
+      return data;
+    }
+
+    // 添加账号功能
+    async function addAccount() {
+      try {
+        // 打开新窗口进行登录
+        const loginWindow = window.open('login.html', '_blank', 'width=500,height=700');
+        
+        if (!loginWindow) {
+          showNotification('无法打开登录窗口，请检查浏览器弹窗设置', 'warning');
+          return;
+        }
+        
+        showNotification('🚀 正在打开登录窗口，将自动执行登录流程...', 'info', 3000);
+        
+        // 监听窗口关闭
+        const checkClosed = setInterval(() => {
+          if (loginWindow.closed) {
+            clearInterval(checkClosed);
+            showNotification('登录窗口已关闭，正在刷新会话列表...', 'info');
+            // 自动刷新会话列表
+            setTimeout(() => {
+              loadSessions();
+              showNotification('✅ 会话列表已刷新，请选择新添加的账号', 'success');
+            }, 1000);
+          }
+        }, 1000);
+        
+        // 定期检查登录状态（可选）
+        const checkLogin = setInterval(() => {
+          if (loginWindow.closed) {
+            clearInterval(checkLogin);
+            return;
+          }
+          
+          // 每5秒检查一次会话列表是否有更新
+          setTimeout(() => {
+            loadSessions();
+          }, 5000);
+        }, 10000);
+        
+      } catch (error) {
+        showNotification('打开登录窗口失败', 'error');
+      }
+    }
+
+    // 会话管理
+    async function loadSessions() {
+      try {
+        const data = await apiCall('/api/v1/sessions');
+        sessionSelect.innerHTML = '<option value="">请选择会话</option>';
+        
+        if (data.data && data.data.sessions) {
+          data.data.sessions.forEach(session => {
+            const option = document.createElement('option');
+            option.value = session;
+            option.textContent = session;
+            sessionSelect.appendChild(option);
+          });
+        }
+      } catch (error) {
+        showNotification('加载会话列表失败', 'error');
+      }
+    }
+
+    // 检查登录状态
+    async function checkLoginStatus() {
+      if (!currentSession) {
+        showNotification('请先选择会话', 'warning');
+        return;
+      }
+      
+      setLoading(checkLoginBtn, true);
+      
+      try {
+        const data = await apiCall('/api/v1/login/status');
+        const isLoggedIn = data.data;
+        
+        updateLoginStatus(isLoggedIn);
+        
+        if (isLoggedIn) {
+          showNotification('登录状态正常', 'success');
+        } else {
+          showNotification('未登录，请重新登录', 'warning');
+        }
+      } catch (error) {
+        showNotification('检查登录状态失败', 'error');
+        updateLoginStatus(false);
+      } finally {
+        setLoading(checkLoginBtn, false);
+      }
+    }
+
+     // 图片上传处理
+     function setupImageUpload() {
+       imageUpload.addEventListener('click', (e) => {
+         // 如果按住Ctrl键，选择文件夹
+         if (e.ctrlKey || e.metaKey) {
+           folderInput.click();
+         } else {
+           imageInput.click();
+         }
+       });
+
+       imageUpload.addEventListener('dragover', (e) => {
+         e.preventDefault();
+         imageUpload.classList.add('dragover');
+       });
+
+       imageUpload.addEventListener('dragleave', () => {
+         imageUpload.classList.remove('dragover');
+       });
+
+       imageUpload.addEventListener('drop', (e) => {
+         e.preventDefault();
+         imageUpload.classList.remove('dragover');
+         
+         const files = Array.from(e.dataTransfer.files);
+         handleImageFiles(files);
+       });
+
+       imageInput.addEventListener('change', (e) => {
+         const files = Array.from(e.target.files);
+         handleImageFiles(files);
+       });
+
+       // 文件夹选择处理
+       folderInput.addEventListener('change', (e) => {
+         const files = Array.from(e.target.files);
+         if (files.length > 0) {
+           // 从第一个文件提取目录路径
+           const firstFile = files[0];
+           if (firstFile.webkitRelativePath) {
+             const fullPath = firstFile.webkitRelativePath;
+             const lastSlashIndex = fullPath.lastIndexOf('/');
+             if (lastSlashIndex > 0) {
+               const directory = fullPath.substring(0, lastSlashIndex + 1);
+               imagePrefix.value = directory;
+               updateImagePaths();
+               showNotification(`已自动提取目录前缀: ${directory}`, 'success');
+               
+               // 保存到localStorage
+               localStorage.setItem('xiaohongshu_image_prefix', directory);
+             }
+           }
+           
+           // 过滤出图片文件
+           const imageFiles = files.filter(file => file.type.startsWith('image/'));
+           if (imageFiles.length > 0) {
+             handleImageFiles(imageFiles);
+             showNotification(`已选择 ${imageFiles.length} 张图片`, 'success');
+           } else {
+             showNotification('选择的文件夹中没有图片文件', 'warning');
+           }
+         }
+       });
+     }
+
+     function handleImageFiles(files) {
+       files.forEach(file => {
+         if (file.type.startsWith('image/')) {
+           const reader = new FileReader();
+           reader.onload = (e) => {
+             const imageItem = document.createElement('div');
+             imageItem.className = 'image-item';
+             
+             // 如果是第一次选择图片且没有设置路径，提示用户使用文件夹选择
+             if (selectedImages.length === 0 && !imagePrefix.value.trim()) {
+               showNotification('建议按住 Ctrl 键点击选择整个文件夹，可自动提取路径前缀', 'info');
+             }
+             
+             // 生成完整路径
+             const fullPath = generateImagePath(file.name);
+             
+             imageItem.innerHTML = `
+               <img src="${e.target.result}" alt="${file.name}">
+               <div class="image-info">${file.name}</div>
+               <div class="image-path" style="position: absolute; bottom: 20px; left: 4px; right: 4px; background: rgba(0,0,0,0.8); color: white; padding: 2px 4px; font-size: 10px; border-radius: 2px; word-break: break-all;">${fullPath}</div>
+               <button type="button" class="image-remove" onclick="removeImage(this)">×</button>
+             `;
+             imagePreview.appendChild(imageItem);
+             
+             selectedImages.push({
+               file: file,
+               element: imageItem,
+               fullPath: fullPath
+             });
+             
+             // 更新路径列表显示
+             updateImagePathsList();
+           };
+           reader.readAsDataURL(file);
+         }
+       });
+     }
+
+     // 从文件路径中提取目录前缀
+     function extractDirectoryPrefix(file) {
+       // 尝试从文件的webkitRelativePath获取完整路径
+       if (file.webkitRelativePath) {
+         const fullPath = file.webkitRelativePath;
+         const lastSlashIndex = fullPath.lastIndexOf('/');
+         if (lastSlashIndex > 0) {
+           const directory = fullPath.substring(0, lastSlashIndex + 1);
+           imagePrefix.value = directory;
+           updateImagePaths();
+           showNotification(`已自动提取目录前缀: ${directory}`, 'success');
+           return;
+         }
+       }
+       
+       // 尝试从文件路径中提取目录（如果浏览器支持）
+       if (file.path) {
+         const fullPath = file.path;
+         const lastSlashIndex = Math.max(fullPath.lastIndexOf('/'), fullPath.lastIndexOf('\\'));
+         if (lastSlashIndex > 0) {
+           const directory = fullPath.substring(0, lastSlashIndex + 1);
+           imagePrefix.value = directory;
+           updateImagePaths();
+           showNotification(`已自动提取目录前缀: ${directory}`, 'success');
+           return;
+         }
+       }
+       
+       // 如果无法获取完整路径，尝试使用默认路径
+       if (!imagePrefix.value.trim()) {
+         const defaultPath = './images/';
+         imagePrefix.value = defaultPath;
+         updateImagePaths();
+         showNotification(`已设置默认目录前缀: ${defaultPath}`, 'info');
+       }
+     }
+
+     // 生成图片完整路径
+     function generateImagePath(fileName) {
+       const prefix = imagePrefix.value.trim();
+       
+       if (!prefix) {
+         // 如果没有前缀，返回文件名
+         return fileName;
+       }
+       
+       // 确保前缀以路径分隔符结尾
+       let normalizedPrefix = prefix;
+       if (!normalizedPrefix.endsWith('/') && !normalizedPrefix.endsWith('\\')) {
+         // 根据前缀中的分隔符类型决定使用哪个
+         if (normalizedPrefix.includes('\\')) {
+           normalizedPrefix += '\\';
+         } else {
+           normalizedPrefix += '/';
+         }
+       }
+       
+       return normalizedPrefix + fileName;
+     }
+
+    function removeImage(button) {
+      const imageItem = button.parentElement;
+      const index = Array.from(imagePreview.children).indexOf(imageItem);
+      
+      if (index > -1) {
+        selectedImages.splice(index, 1);
+        imageItem.remove();
+        
+        // 更新路径列表显示
+        updateImagePathsList();
+      }
+    }
+
+    // 发布内容
+    async function publishContent(title, content) {
+      if (!currentSession) {
+        showNotification('请先选择会话', 'warning');
+        return;
+      }
+
+      if (!title.trim()) {
+        showNotification('请输入标题', 'warning');
+        return;
+      }
+
+      if (!content.trim()) {
+        showNotification('请输入内容', 'warning');
+        return;
+      }
+
+      if (selectedImages.length === 0) {
+        showNotification('请至少选择一张图片', 'warning');
+        return;
+      }
+
+      const publishBtn = $('publishText').parentElement;
+      setLoading(publishBtn, true);
+
+       try {
+         // 使用完整路径
+         const imagePaths = selectedImages.map((img) => {
+           // 优先使用完整路径
+           if (img.fullPath) {
+             return img.fullPath;
+           }
+           // 回退到文件名
+           if (img.file && img.file.name) {
+             return img.file.name;
+           }
+           // 最后回退到默认名称
+           return `image_${Date.now()}_${Math.random().toString(36).substr(2, 9)}.jpg`;
+         });
+        
+        const data = await apiCall('/api/v1/publish', 'POST', {
+          title: title.trim(),
+          content: content.trim(),
+          images: imagePaths
+        });
+
+        // 发布成功
+        showNotification('内容发布成功！', 'success');
+        
+         // 清空表单
+         publishForm.reset();
+         selectedImages = [];
+         imagePreview.innerHTML = '';
+         imagePathsList.style.display = 'none';
+        
+      } catch (error) {
+        // 处理API错误
+        let errorMsg = '发布失败';
+        
+        if (error.data) {
+          // API返回的详细错误信息
+          errorMsg = error.data.details || error.data.error || error.message;
+        } else {
+          // 网络错误或其他异常
+          errorMsg = error.message || '网络错误';
+        }
+        
+        showNotification(`发布失败: ${errorMsg}`, 'error');
+      } finally {
+        setLoading(publishBtn, false);
+      }
+    }
+
+    // 加载内容列表
+    async function loadContentList() {
+      if (!currentSession) {
+        showNotification('请先选择会话', 'warning');
+        return;
+      }
+
+      setLoading(loadContentBtn, true);
+
+      try {
+        const data = await apiCall('/api/v1/feeds/list');
+        
+        if (data.data && data.data.feeds) {
+          renderContentList(data.data.feeds, contentList);
+          showNotification(`加载了 ${data.data.feeds.length} 条内容`, 'success');
+        } else {
+          contentList.innerHTML = '<div style="text-align: center; color: var(--text-light); padding: 40px 20px;">暂无内容</div>';
+        }
+      } catch (error) {
+        showNotification('加载内容失败', 'error');
+        contentList.innerHTML = '<div style="text-align: center; color: var(--error); padding: 40px 20px;">加载失败</div>';
+      } finally {
+        setLoading(loadContentBtn, false);
+      }
+    }
+
+    // 搜索内容
+    async function searchContent(keyword) {
+      if (!currentSession) {
+        showNotification('请先选择会话', 'warning');
+        return;
+      }
+
+      if (!keyword.trim()) {
+        showNotification('请输入搜索关键词', 'warning');
+        return;
+      }
+
+      setLoading(searchContentBtn, true);
+
+      try {
+        const data = await apiCall(`/api/v1/feeds/search?keyword=${encodeURIComponent(keyword)}`);
+        
+        if (data.data && data.data.feeds) {
+          renderContentList(data.data.feeds, searchResults);
+          showNotification(`找到 ${data.data.feeds.length} 条相关内容`, 'success');
+        } else {
+          searchResults.innerHTML = '<div style="text-align: center; color: var(--text-light); padding: 40px 20px;">未找到相关内容</div>';
+        }
+      } catch (error) {
+        showNotification('搜索失败', 'error');
+        searchResults.innerHTML = '<div style="text-align: center; color: var(--error); padding: 40px 20px;">搜索失败</div>';
+      } finally {
+        setLoading(searchContentBtn, false);
+      }
+    }
+
+    // 渲染内容列表
+    function renderContentList(feeds, container) {
+      if (!feeds || feeds.length === 0) {
+        container.innerHTML = '<div style="text-align: center; color: var(--text-light); padding: 40px 20px;">暂无内容</div>';
+        return;
+      }
+
+      container.innerHTML = feeds.map(feed => {
+        // 解析小红书数据格式
+        const noteCard = feed.noteCard || {};
+        const user = noteCard.user || {};
+        const interactInfo = noteCard.interactInfo || {};
+        const cover = noteCard.cover || {};
+        
+        // 跳过无效数据（如 rec_query 类型）
+        if (feed.modelType === 'rec_query' || !noteCard.type) {
+          return `
+            <div class="content-item" style="opacity: 0.6;">
+              <div class="content-header">
+                <div class="content-type-badge" style="background: rgba(128, 128, 128, 0.1); color: #666;">推荐</div>
+                <div class="content-id">ID: ${feed.id || '未知'}</div>
+              </div>
+              <div class="content-title">推荐内容（暂不支持显示）</div>
+            </div>
+          `;
+        }
+        
+        // 获取封面图片
+        const coverImage = cover.urlDefault || cover.urlPre || '';
+        
+        // 获取内容类型
+        const contentType = noteCard.type === 'video' ? '视频' : '图文';
+        
+        // 获取互动数据
+        const likedCount = interactInfo.likedCount || '0';
+        const commentCount = interactInfo.commentCount || '0';
+        const collectedCount = interactInfo.collectedCount || '0';
+        
+        // 处理标题显示
+        const displayTitle = noteCard.displayTitle && noteCard.displayTitle.trim() 
+          ? noteCard.displayTitle.trim() 
+          : '无标题';
+        
+        // 处理用户信息
+        const userName = user.nickname || user.nickName || '未知用户';
+        const userAvatar = user.avatar || '';
+        
+        return `
+          <div class="content-item">
+            <div class="content-header">
+              <div class="content-type-badge ${noteCard.type === 'video' ? 'video' : 'image'}">${contentType}</div>
+              <div class="content-id">ID: ${feed.id || '未知'}</div>
+            </div>
+            
+            <div class="content-title">${displayTitle}</div>
+            
+            <div class="content-author">
+              ${userAvatar ? `<img src="${userAvatar}" alt="头像" class="author-avatar" onerror="this.style.display='none'">` : ''}
+              <span class="author-name">${userName}</span>
+            </div>
+            
+            ${coverImage ? `
+              <div class="content-cover">
+                <img src="${coverImage}" alt="封面" class="cover-image" onerror="this.style.display='none'">
+              </div>
+            ` : ''}
+            
+            <div class="content-meta">
+              <div class="interaction-stats">
+                <span class="stat-item">❤️ ${likedCount}</span>
+                <span class="stat-item">💬 ${commentCount}</span>
+                <span class="stat-item">⭐ ${collectedCount}</span>
+              </div>
+              <div class="content-dimensions">
+                ${cover.width && cover.height ? `${cover.width} × ${cover.height}` : ''}
+                ${noteCard.video && noteCard.video.capa ? `· ${noteCard.video.capa.duration}秒` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 事件监听
+    sessionSelect.addEventListener('change', (e) => {
+      currentSession = e.target.value;
+      console.log('Session changed to:', currentSession);
+      if (currentSession) {
+        checkLoginStatus();
+      }
+    });
+
+    refreshSessionsBtn.addEventListener('click', () => {
+      console.log('Refresh sessions clicked');
+      loadSessions();
+    });
+    
+    addAccountBtn.addEventListener('click', () => {
+      console.log('Add account clicked');
+      addAccount();
+    });
+    
+    checkLoginBtn.addEventListener('click', () => {
+      console.log('Check login clicked');
+      checkLoginStatus();
+    });
+    
+    loadContentBtn.addEventListener('click', () => {
+      console.log('Load content clicked');
+      loadContentList();
+    });
+    
+    searchContentBtn.addEventListener('click', () => {
+      console.log('Search content clicked');
+      searchContent(searchKeyword.value);
+    });
+
+    publishForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = $('title').value;
+      const content = $('content').value;
+      publishContent(title, content);
+    });
+
+    searchKeyword.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        searchContent(searchKeyword.value);
+      }
+    });
+
+       // 监听前缀目录变化，自动更新图片路径
+       imagePrefix.addEventListener('input', () => {
+         updateImagePaths();
+         // 保存到localStorage
+         localStorage.setItem('xiaohongshu_image_prefix', imagePrefix.value);
+       });
+
+       // 自动检测当前目录
+       autoFillPrefix.addEventListener('click', () => {
+         // 获取当前用户名
+         const currentUser = getCurrentUsername();
+         
+         // 尝试检测常见的图片目录
+         const commonPaths = [
+           `C:\\Users\\${currentUser}\\Downloads\\发布素材\\`,
+           `C:\\Users\\${currentUser}\\Downloads\\`,
+           `C:\\Users\\${currentUser}\\Pictures\\`,
+           'D:\\images\\',
+           './images/',
+           './assets/',
+           './uploads/'
+         ];
+         
+         // 使用第一个路径作为默认值
+         const detectedPath = commonPaths[0];
+         imagePrefix.value = detectedPath;
+         updateImagePaths();
+         showNotification(`已自动填入路径: ${detectedPath}`, 'success');
+       });
+
+       // 选择文件夹（使用文件输入框模拟）
+       selectFolder.addEventListener('click', () => {
+         const folderInput = document.createElement('input');
+         folderInput.type = 'file';
+         folderInput.webkitdirectory = true;
+         folderInput.multiple = true;
+         
+         folderInput.addEventListener('change', (e) => {
+           if (e.target.files.length > 0) {
+             const firstFile = e.target.files[0];
+             const fullPath = firstFile.webkitRelativePath || firstFile.name;
+             const folderPath = fullPath.substring(0, fullPath.lastIndexOf('/') + 1);
+             
+             // 转换为绝对路径格式
+             let normalizedPath = folderPath;
+             if (normalizedPath.startsWith('./')) {
+               // 相对路径，保持原样
+             } else {
+               // 尝试转换为Windows格式
+               normalizedPath = normalizedPath.replace(/\//g, '\\');
+             }
+             
+             imagePrefix.value = normalizedPath;
+             updateImagePaths();
+             showNotification(`已选择文件夹: ${normalizedPath}`, 'success');
+             
+             // 保存到localStorage
+             localStorage.setItem('xiaohongshu_image_prefix', normalizedPath);
+           }
+         });
+         
+         folderInput.click();
+       });
+
+       // 设置用户名
+       setUsername.addEventListener('click', () => {
+         const username = usernameInput.value.trim();
+         if (username) {
+           localStorage.setItem('xiaohongshu_username', username);
+           showNotification(`用户名已设置为: ${username}`, 'success');
+           // 重新生成路径
+           updateImagePaths();
+         } else {
+           showNotification('请输入用户名', 'warning');
+         }
+       });
+
+       // 快速路径按钮
+       quickPaths.forEach(btn => {
+         btn.addEventListener('click', () => {
+           const pathKey = btn.getAttribute('data-path');
+           const currentUser = getCurrentUsername();
+           let path = '';
+           
+           switch (pathKey) {
+             case 'user-downloads-material':
+               path = `C:\\Users\\${currentUser}\\Downloads\\发布素材\\`;
+               break;
+             case 'user-downloads':
+               path = `C:\\Users\\${currentUser}\\Downloads\\`;
+               break;
+             case 'user-pictures':
+               path = `C:\\Users\\${currentUser}\\Pictures\\`;
+               break;
+             default:
+               path = pathKey;
+           }
+           
+           imagePrefix.value = path;
+           updateImagePaths();
+           showNotification(`已选择路径: ${path}`, 'info');
+         });
+       });
+
+       // 更新所有已选择图片的路径
+       function updateImagePaths() {
+         selectedImages.forEach((img, index) => {
+           if (img.file && img.element) {
+             const newPath = generateImagePath(img.file.name);
+             img.fullPath = newPath;
+             
+             // 更新显示的路径
+             const pathElement = img.element.querySelector('.image-path');
+             if (pathElement) {
+               pathElement.textContent = newPath;
+             }
+           }
+         });
+         
+         // 更新路径列表显示
+         updateImagePathsList();
+       }
+
+       // 更新图片路径列表显示
+       function updateImagePathsList() {
+         if (selectedImages.length === 0) {
+           imagePathsList.style.display = 'none';
+           return;
+         }
+
+         imagePathsList.style.display = 'block';
+         imagePathsContent.innerHTML = selectedImages.map((img, index) => {
+           const path = img.fullPath || img.file?.name || `图片${index + 1}`;
+           return `<div>${index + 1}. ${path}</div>`;
+         }).join('');
+       }
+
+       // 初始化
+       setupImageUpload();
+       loadSessions();
+       
+       // 图片选择按钮事件
+       selectImageBtn.addEventListener('click', () => {
+         imageInput.click();
+       });
+       
+       selectFolderBtn.addEventListener('click', () => {
+         folderInput.click();
+       });
+       
+       // 尝试自动填入默认路径
+       autoFillDefaultPath();
+       
+       // 显示当前用户名
+       const currentUser = getCurrentUsername();
+       if (currentUser !== '用户名') {
+         usernameInput.placeholder = `当前用户名: ${currentUser}`;
+       }
+
+       // 获取当前用户名
+       function getCurrentUsername() {
+         // 尝试从localStorage获取保存的用户名
+         let username = localStorage.getItem('xiaohongshu_username');
+         if (username) {
+           return username;
+         }
+         
+         // 尝试从User-Agent中提取用户名（Windows系统）
+         const userAgent = navigator.userAgent;
+         if (userAgent.includes('Windows')) {
+           // 尝试从User-Agent中提取用户名
+           const match = userAgent.match(/Windows NT [\d.]+; ([^;]+)/);
+           if (match && match[1]) {
+             username = match[1].trim();
+             // 保存到localStorage
+             localStorage.setItem('xiaohongshu_username', username);
+             return username;
+           }
+         }
+         
+         // 如果无法获取，使用默认值
+         username = '用户名';
+         localStorage.setItem('xiaohongshu_username', username);
+         return username;
+       }
+
+       // 自动填入默认路径
+       function autoFillDefaultPath() {
+         // 检查localStorage中是否有保存的路径
+         const savedPath = localStorage.getItem('xiaohongshu_image_prefix');
+         if (savedPath) {
+           imagePrefix.value = savedPath;
+           updateImagePaths();
+           return;
+         }
+         
+         // 获取当前用户名
+         const currentUser = getCurrentUsername();
+         
+         // 尝试检测常见的图片目录
+         const commonPaths = [
+           `C:\\Users\\${currentUser}\\Downloads\\发布素材\\`,
+           `C:\\Users\\${currentUser}\\Downloads\\`,
+           `C:\\Users\\${currentUser}\\Pictures\\`,
+           'D:\\images\\',
+           './images/',
+           './assets/',
+           './uploads/'
+         ];
+         
+         // 默认使用第一个路径
+         const defaultPath = commonPaths[0];
+         imagePrefix.value = defaultPath;
+         updateImagePaths();
+         
+         // 保存到localStorage
+         localStorage.setItem('xiaohongshu_image_prefix', defaultPath);
+       }
+
+    // 浏览器管理功能
+    const browserStatusBtn = $('browserStatusBtn');
+    const closeBrowserBtn = $('closeBrowserBtn');
+    const closeAllBrowsersBtn = $('closeAllBrowsersBtn');
+    const browserStatus = $('browserStatus');
+
+    // 查看浏览器状态
+    browserStatusBtn.addEventListener('click', async () => {
+      setLoading(browserStatusBtn, true);
+      
+      try {
+        const data = await apiCall('/api/v1/browser/status');
+        browserStatus.style.display = 'block';
+        browserStatus.innerHTML = `
+          <div style="margin-bottom: 8px;"><strong>🌐 浏览器状态</strong></div>
+          <div>无头模式: <span style="color: ${data.data.headless_mode ? 'var(--success)' : 'var(--warning)'}">${data.data.headless_mode ? '是' : '否'}</span></div>
+          <div>活跃会话数: <span style="color: var(--primary)">${data.data.session_count}</span></div>
+          <div>当前会话: <span style="color: var(--info)">${currentSession || '未选择'}</span></div>
+        `;
+        showNotification('浏览器状态获取成功', 'success');
+      } catch (error) {
+        showNotification('获取浏览器状态失败', 'error');
+        browserStatus.style.display = 'none';
+      } finally {
+        setLoading(browserStatusBtn, false);
+      }
+    });
+
+    // 关闭当前浏览器
+    closeBrowserBtn.addEventListener('click', async () => {
+      if (!currentSession) {
+        showNotification('请先选择会话', 'warning');
+        return;
+      }
+
+      if (!confirm(`确定要关闭会话 "${currentSession}" 的浏览器吗？`)) {
+        return;
+      }
+
+      setLoading(closeBrowserBtn, true);
+      
+      try {
+        await apiCall('/api/v1/browser/close', 'POST', {
+          session_id: currentSession
+        });
+        showNotification('浏览器已关闭', 'success');
+        browserStatus.style.display = 'none';
+      } catch (error) {
+        showNotification('关闭浏览器失败', 'error');
+      } finally {
+        setLoading(closeBrowserBtn, false);
+      }
+    });
+
+    // 关闭所有浏览器
+    closeAllBrowsersBtn.addEventListener('click', async () => {
+      if (!confirm('确定要关闭所有浏览器吗？这将影响所有会话！')) {
+        return;
+      }
+
+      setLoading(closeAllBrowsersBtn, true);
+      
+      try {
+        const data = await apiCall('/api/v1/browser/close-all', 'POST');
+        showNotification(`已关闭 ${data.data.closed_count} 个浏览器`, 'success');
+        browserStatus.style.display = 'none';
+      } catch (error) {
+        showNotification('关闭所有浏览器失败', 'error');
+      } finally {
+        setLoading(closeAllBrowsersBtn, false);
+      }
+    });
+
+    // 全局函数（用于图片删除）
+    window.removeImage = removeImage;
+  });
+  </script>
+
+  <!-- Electron 特定功能 -->
+  <script>
+    // 检测是否在Electron环境中
+    const isElectron = typeof window.electronAPI !== 'undefined';
+    
+    if (isElectron) {
+      console.log('运行在Electron环境中');
+      
+      // 获取应用信息
+      const appInfo = window.electronAPI.getAppInfo();
+      console.log('应用信息:', appInfo);
+      
+      // 添加Electron特定的UI元素
+      document.addEventListener('DOMContentLoaded', function() {
+        // 在标题栏添加Electron标识
+        const header = document.querySelector('.header h1');
+        if (header) {
+          header.textContent = '小红书管理平台 - 桌面版';
+        }
+        
+        // 添加后端状态指示器
+        addBackendStatusIndicator();
+        
+        // 监听后端状态变化
+        window.addEventListener('backend-status-changed', function(event) {
+          updateBackendStatus(event.detail);
+        });
+      });
+      
+      // 添加后端状态指示器
+      function addBackendStatusIndicator() {
+        const sessionBar = document.querySelector('.session-bar');
+        if (sessionBar) {
+          const statusIndicator = document.createElement('div');
+          statusIndicator.id = 'backend-status';
+          statusIndicator.style.cssText = `
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--success);
+            color: white;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+          `;
+          statusIndicator.innerHTML = `
+            <div style="width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+            后端服务运行中
+          `;
+          sessionBar.appendChild(statusIndicator);
+        }
+      }
+      
+      // 更新后端状态
+      function updateBackendStatus(status) {
+        const indicator = document.getElementById('backend-status');
+        if (indicator) {
+          if (status === 'running') {
+            indicator.style.background = 'var(--success)';
+            indicator.innerHTML = `
+              <div style="width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+              后端服务运行中
+            `;
+          } else if (status === 'stopped') {
+            indicator.style.background = 'var(--error)';
+            indicator.innerHTML = `
+              <div style="width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+              后端服务已停止
+            `;
+          } else {
+            indicator.style.background = 'var(--warning)';
+            indicator.innerHTML = `
+              <div style="width: 8px; height: 8px; background: white; border-radius: 50%;"></div>
+              后端服务状态未知
+            `;
+          }
+        }
+      }
+      
+      // 增强文件选择功能
+      function enhanceFileSelection() {
+        const selectImageBtn = document.getElementById('selectImageBtn');
+        const selectFolderBtn = document.getElementById('selectFolderBtn');
+        
+        if (selectImageBtn && window.electronAPI) {
+          selectImageBtn.addEventListener('click', async function() {
+            try {
+              const result = await window.electronAPI.selectFile({
+                title: '选择图片文件',
+                filters: [
+                  { name: '图片文件', extensions: ['jpg', 'jpeg', 'png', 'gif'] },
+                  { name: '所有文件', extensions: ['*'] }
+                ],
+                properties: ['openFile', 'multiSelections']
+              });
+              
+              if (result && result.length > 0) {
+                // 处理选择的文件
+                handleSelectedFiles(result);
+              }
+            } catch (error) {
+              console.error('文件选择失败:', error);
+            }
+          });
+        }
+        
+        if (selectFolderBtn && window.electronAPI) {
+          selectFolderBtn.addEventListener('click', async function() {
+            try {
+              const result = await window.electronAPI.selectFolder();
+              if (result) {
+                console.log('选择的文件夹:', result);
+                // 处理选择的文件夹
+                handleSelectedFolder(result);
+              }
+            } catch (error) {
+              console.error('文件夹选择失败:', error);
+            }
+          });
+        }
+      }
+      
+      // 处理选择的文件
+      function handleSelectedFiles(files) {
+        files.forEach(file => {
+          // 添加到图片列表
+          if (typeof handleImageFiles === 'function') {
+            // 模拟File对象
+            const mockFile = {
+              name: file.split(/[\\/]/).pop(),
+              path: file,
+              type: 'image/' + file.split('.').pop().toLowerCase()
+            };
+            handleImageFiles([mockFile]);
+          }
+        });
+      }
+      
+      // 处理选择的文件夹
+      function handleSelectedFolder(folderPath) {
+        // 设置图片目录前缀
+        const imagePrefix = document.getElementById('imagePrefix');
+        if (imagePrefix) {
+          imagePrefix.value = folderPath + (folderPath.endsWith('/') || folderPath.endsWith('\\') ? '' : '/');
+          updateImagePaths();
+        }
+      }
+      
+      // 页面加载完成后增强功能
+      document.addEventListener('DOMContentLoaded', function() {
+        enhanceFileSelection();
+      });
+    } else {
+      console.log('运行在浏览器环境中');
+    }
+  </script>
+</body>
+</html>

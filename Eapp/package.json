@@ -1,0 +1,60 @@
+{
+  "name": "xiaohongshu-mcp-desktop",
+  "version": "1.0.0",
+  "description": "小红书管理平台 - 桌面版",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win --config.win.target=portable",
+    "build:windev": "electron-builder --win --config.win.target=dir",
+    "build-win-nsis": "electron-builder --win --config.win.target=nsis",
+    "build-win-portable": "electron-builder --win --config.win.target=portable",
+    "dist": "electron-builder --publish=never",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean"
+  },
+  "keywords": [
+    "xiaohongshu",
+    "mcp",
+    "desktop",
+    "electron"
+  ],
+  "author": "Xiaohongshu MCP Team",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.6.4",
+    "rimraf": "^5.0.0"
+  },
+  "build": {
+    "appId": "com.xiaohongshu.mcp.desktop",
+    "productName": "小红书管理平台",
+    "directories": {
+      "output": "build"
+    },
+    "files": [
+      "**/*",
+      "!node_modules",
+      "!dist",
+      "!*.md",
+      "!build"
+    ],
+    "extraResources": [
+      {
+        "from": "backend",
+        "to": "backend"
+      }
+    ],
+    "asarUnpack": [
+      "backend/**/*"
+    ],
+    "win": {
+      "target": "portable",
+      "sign": false
+    },
+    "portable": {
+      "artifactName": "小红书管理平台-${version}.exe"
+    }
+  }
+}
