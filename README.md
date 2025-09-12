@@ -14,6 +14,15 @@
 ![](./png/image.png)
 
 
+问题反馈
+![](./png/228e65c0eb8bb9a3a26de38805bf88c5.jpg)
+
+
+赞赏
+
+![](./png/6fbe97d18b0a6992141ece2aadea0a9d.jpg)
+
+
 ### 打包教程
 
 1. 打包 go 服务端 为 exe
@@ -77,8 +86,3 @@ cd Eapp && npm run build:win
 - 变更摘要:
   - 生成了接口总览表，标注方法、路径、用途和处理函数，覆盖 `页面/健康检查/MCP/API v1` 全部端点。
 
-
-
-  ### 赞赏我
-
-  ![](./png/6fbe97d18b0a6992141ece2aadea0a9d.jpg)
