@@ -14,7 +14,7 @@
 1. 打包 go 服务端 为 exe
 
 ```bash
-go build -ldflags "-s -w" -o dist/backend/iaohongshu-mcp.exe .
+go build -ldflags "-s -w" -o dist/backend/xiaohongshu-mcp.exe .
 ```
 
 2. 打包 exe 主程序 
